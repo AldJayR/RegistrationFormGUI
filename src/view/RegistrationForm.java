@@ -2,11 +2,21 @@ package view;
 
 import model.User;
 import controller.RegistrationController;
+import com.formdev.flatlaf.FlatLaf;
+
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.BorderFactory;
 
 public class RegistrationForm extends javax.swing.JFrame {
 
@@ -20,6 +30,7 @@ public class RegistrationForm extends javax.swing.JFrame {
         initComponents();
         setupTable();
         disableControls();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
 
     public void setController(RegistrationController controller) {
@@ -40,10 +51,45 @@ public class RegistrationForm extends javax.swing.JFrame {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
         };
         studentListTable.setModel(model); // Corrected: Use studentListTable
         studentListTable.setRowHeight(25); // Set consistent row height
         studentListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        studentListTable.setIntercellSpacing(new Dimension(0, 0)); // Remove cell spacing
+        studentListTable.setShowGrid(false); // Hide grid lines
+        studentListTable.setFillsViewportHeight(true); // Fill the viewport height
+        JScrollPane scrollPane = (JScrollPane) studentListTable.getParent().getParent(); // Get the scroll pane
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Remove scroll pane border
+        scrollPane.getViewport().setBackground(Color.WHITE);  // Set viewport background to white
+
+        // Customize table header
+        JTableHeader header = studentListTable.getTableHeader();
+        header.setBackground(Color.decode("#f1f5f9")); // Set header background
+        header.setForeground(Color.BLACK);          // Set header text color (optional)
+        header.setFont(header.getFont().deriveFont(Font.BOLD)); // Make header text bold (optional)
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#cbd5e1"))); // Add a bottom border
+
+        // Alternating row colors
+        studentListTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus,
+                    int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                // Set background color based on row index and selection state
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground()); // Use default selection color
+                    c.setForeground(table.getSelectionForeground());
+                } else {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Color.decode("#cbd5e1"));
+                    c.setForeground(table.getForeground()); // Use default text color
+                }
+                return c;
+            }
+        });
     }
 
     private void addRowSelectionListener() {
@@ -156,7 +202,7 @@ public class RegistrationForm extends javax.swing.JFrame {
         ageTextField.setText("");
         sectionTextField.setText("");
     }
- 
+
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
@@ -256,6 +302,12 @@ public class RegistrationForm extends javax.swing.JFrame {
         maleRadioBtn = new javax.swing.JRadioButton();
         femaleRadioBtn = new javax.swing.JRadioButton();
         jLabel13 = new javax.swing.JLabel();
+        addBtn = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
+        clearBtn = new javax.swing.JButton();
+        closeBtn = new javax.swing.JButton();
         tablePanel = new RoundedPanel(10, 10);
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -264,17 +316,12 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         searchBtn = new javax.swing.JButton();
         printBtn = new javax.swing.JButton();
-        buttonPanel = new RoundedPanel(20, 20);
-        addBtn = new javax.swing.JButton();
-        editBtn = new javax.swing.JButton();
-        deleteBtn = new javax.swing.JButton();
-        closeBtn = new javax.swing.JButton();
-        clearBtn = new javax.swing.JButton();
-        saveBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Student Information System");
-        setPreferredSize(new java.awt.Dimension(1600, 1000));
+        setPreferredSize(new java.awt.Dimension(1600, 800));
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(3866, 800));
 
         mainPanel.setBackground(new java.awt.Color(248, 250, 252));
 
@@ -400,6 +447,66 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel13.setForeground(new java.awt.Color(30, 41, 59));
         jLabel13.setText("Student Details");
 
+        addBtn.setBackground(new java.awt.Color(99, 102, 241));
+        addBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        addBtn.setForeground(new java.awt.Color(255, 255, 255));
+        addBtn.setText("Add New");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
+
+        saveBtn.setBackground(new java.awt.Color(14, 165, 233));
+        saveBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        saveBtn.setForeground(new java.awt.Color(255, 255, 255));
+        saveBtn.setText("Save");
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBtnActionPerformed(evt);
+            }
+        });
+
+        editBtn.setBackground(new java.awt.Color(245, 158, 11));
+        editBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        editBtn.setForeground(new java.awt.Color(255, 255, 255));
+        editBtn.setText("Edit");
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
+
+        deleteBtn.setBackground(new java.awt.Color(239, 68, 68));
+        deleteBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+
+        clearBtn.setBackground(new java.awt.Color(203, 213, 225));
+        clearBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        clearBtn.setForeground(new java.awt.Color(255, 255, 255));
+        clearBtn.setText("Clear");
+        clearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearBtnActionPerformed(evt);
+            }
+        });
+
+        closeBtn.setBackground(new java.awt.Color(71, 85, 105));
+        closeBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        closeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        closeBtn.setText("Close");
+        closeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout studentDetailsPanelLayout = new javax.swing.GroupLayout(studentDetailsPanel);
         studentDetailsPanel.setLayout(studentDetailsPanelLayout);
         studentDetailsPanelLayout.setHorizontalGroup(
@@ -442,15 +549,27 @@ public class RegistrationForm extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(studentDetailsPanelLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(studentDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 33, Short.MAX_VALUE))
-            .addGroup(studentDetailsPanelLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addComponent(jLabel13)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(studentDetailsPanelLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(studentDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(studentDetailsPanelLayout.createSequentialGroup()
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(studentDetailsPanelLayout.createSequentialGroup()
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel10)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 33, Short.MAX_VALUE))
         );
         studentDetailsPanelLayout.setVerticalGroup(
             studentDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,7 +617,17 @@ public class RegistrationForm extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(studentDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(studentDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tablePanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -601,102 +730,6 @@ public class RegistrationForm extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        buttonPanel.setBackground(new java.awt.Color(255, 255, 255));
-        buttonPanel.setBorder(new RoundedBorder(30, new java.awt.Color(0xCB, 0xD5, 0xE1), 2));
-
-        addBtn.setBackground(new java.awt.Color(99, 102, 241));
-        addBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        addBtn.setForeground(new java.awt.Color(255, 255, 255));
-        addBtn.setText("Add New");
-        addBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBtnActionPerformed(evt);
-            }
-        });
-
-        editBtn.setBackground(new java.awt.Color(245, 158, 11));
-        editBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        editBtn.setForeground(new java.awt.Color(255, 255, 255));
-        editBtn.setText("Edit");
-        editBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editBtnActionPerformed(evt);
-            }
-        });
-
-        deleteBtn.setBackground(new java.awt.Color(239, 68, 68));
-        deleteBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
-        deleteBtn.setText("Delete");
-        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteBtnActionPerformed(evt);
-            }
-        });
-
-        closeBtn.setBackground(new java.awt.Color(71, 85, 105));
-        closeBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        closeBtn.setForeground(new java.awt.Color(255, 255, 255));
-        closeBtn.setText("Close");
-        closeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeBtnActionPerformed(evt);
-            }
-        });
-
-        clearBtn.setBackground(new java.awt.Color(203, 213, 225));
-        clearBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        clearBtn.setForeground(new java.awt.Color(255, 255, 255));
-        clearBtn.setText("Clear");
-        clearBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearBtnActionPerformed(evt);
-            }
-        });
-
-        saveBtn.setBackground(new java.awt.Color(14, 165, 233));
-        saveBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        saveBtn.setForeground(new java.awt.Color(255, 255, 255));
-        saveBtn.setText("Save");
-        saveBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveBtnActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
-        buttonPanel.setLayout(buttonPanelLayout);
-        buttonPanelLayout.setHorizontalGroup(
-            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(479, Short.MAX_VALUE))
-        );
-        buttonPanelLayout.setVerticalGroup(
-            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -708,8 +741,7 @@ public class RegistrationForm extends javax.swing.JFrame {
                         .addComponent(studentDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(2339, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
@@ -721,9 +753,7 @@ public class RegistrationForm extends javax.swing.JFrame {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(studentDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addContainerGap(400, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(mainPanel);
@@ -736,9 +766,7 @@ public class RegistrationForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 949, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 868, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -863,6 +891,11 @@ public class RegistrationForm extends javax.swing.JFrame {
 
     private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed
         // TODO add your handling code here:
+        if (closeBtn.getText().equals("Cancel")) {
+            clearForm();
+            disableControls();
+            return;
+        }
         closeForm();
     }//GEN-LAST:event_closeBtnActionPerformed
 
@@ -892,10 +925,11 @@ public class RegistrationForm extends javax.swing.JFrame {
                         selectedSex = "Female";
                     }
                     existingUser.setSex(selectedSex);
-                     existingUser.setAge(parseAge(ageTextField.getText()));
+                    existingUser.setAge(parseAge(ageTextField.getText()));
                     existingUser.setSection(sectionTextField.getText());
 
                     controller.updateUser(existingUser);
+                    studentListTable.setEnabled(true);
                 } else {
                     showError("User with student number " + studentNumberTextField.getText() + " not found.");
                 }
@@ -958,7 +992,6 @@ public class RegistrationForm extends javax.swing.JFrame {
     private javax.swing.JButton addBtn;
     private javax.swing.JTextArea addressTextArea;
     private javax.swing.JTextField ageTextField;
-    private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton clearBtn;
     private javax.swing.JButton closeBtn;
     private javax.swing.JComboBox<String> courseComboBox;

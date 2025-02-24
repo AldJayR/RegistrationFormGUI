@@ -6,6 +6,7 @@ import model.MySQLUserDAO;
 import model.UserDao;
 import view.RegistrationForm;
 import javax.swing.*;
+import java.awt.Color;
 
 public class Main {
 
@@ -14,9 +15,9 @@ public class Main {
     private static final String DB_PASSWORD = "";
 
     public static void main(String[] args) {
-        
+
         setupLookAndFeel();
-        
+
         java.awt.EventQueue.invokeLater(() -> {
             RegistrationForm view = new RegistrationForm();
             UserDao userDao = new MySQLUserDAO(DB_URL, DB_USER, DB_PASSWORD);
@@ -32,9 +33,14 @@ public class Main {
             UIManager.put("Button.arc", 10); // Rounded buttons
             UIManager.put("Component.focusWidth", 2);
             UIManager.put("ScrollBar.thumbArc", 5);
-            UIManager.put("TextComponent.arc", 5); // Rounded text fields
-            UIManager.put("PasswordField.showRevealButton", true); // Show password reveal button (if you use password fields)
-            UIManager.put("Button.focusedBackground", java.awt.Color.BLUE);
+            UIManager.put("TextComponent.arc", 10); // Rounded text fields
+            UIManager.put("PasswordField.showRevealButton", true);
+            UIManager.put("Button.focusedBackground", Color.BLUE);
+            UIManager.put("TextField.background", new Color(248, 250, 252));
+            UIManager.put("TextField.foreground", new Color(17, 24, 39));
+            UIManager.put("TextField.selectionBackground", new Color(34, 211, 238));
+            UIManager.put("TextField.selectionForeground", Color.BLACK);
+
             FlatLaf.updateUI(); // Apply changes immediately
 
         } catch (Exception ex) {
